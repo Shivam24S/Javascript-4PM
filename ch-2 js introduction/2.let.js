@@ -1,10 +1,10 @@
 let msg = "global scope";
 
 function blockScope() {
-  //   let msg = "hello";
+    let msg = "hello";
 
   if (true) {
-    let msg = "hi";
+    // let msg = "hi";
 
     console.log(msg);
   }
