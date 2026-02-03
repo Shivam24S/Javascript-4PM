@@ -12,4 +12,4 @@ if (marks >= 90) {
   console.log("you have achieved D grade");
 } else {
   console.log("you have failed this examination");
-}
+}git 
