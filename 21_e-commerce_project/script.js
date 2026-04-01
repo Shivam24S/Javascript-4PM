@@ -102,7 +102,7 @@ products.forEach((p) => {
   <div class="card-body text-center">
     <h5 class="card-title">${p.name}</h5>
      <h4 class="card-text">₹${p.price} </h4>
-  <button class="btn btn-primary" >Add to cart</button>
+  <button class="btn btn-primary" onclick="addToCart(${p.id})" >Add to cart</button>
   </div>
 </div>
     
@@ -111,10 +111,85 @@ products.forEach((p) => {
     `;
 });
 
-const data = { name: "electronic", qty: 1 };
+// localStorage concept added
 
-localStorage.setItem("cartData", JSON.stringify(data));
+// const data = { name: "electronic", qty: 1 };
 
-const productData = localStorage.getItem("cartData");
+// localStorage.setItem("cartData", JSON.stringify(data));
 
-console.log("productData", JSON.parse(productData));
+// const productData = localStorage.getItem("cartData");
+
+// console.log("productData", JSON.parse(productData));
+
+let cartItems = JSON.parse(localStorage.getItem("cartData")) || [];
+
+console.log("cartItems", cartItems);
+
+function addToCart(id) {
+  try {
+    let product = cartItems.find((p) => p.id === id);
+
+    console.log("product already added", product);
+
+    if (product) {
+      product.qty++;
+    } else {
+      product = products.find((p) => p.id === id);
+
+      cartItems.push({ ...product, qty: 1 });
+
+      console.log("product new added", product);
+    }
+
+    localStorage.setItem("cartData", JSON.stringify(cartItems));
+
+    alert("item added in cart");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function showModal() {
+  try {
+    const cartList = document.getElementById("cartList");
+
+    let modal = new bootstrap.Modal(cartList);
+
+    modal.show();
+    showCartList();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function showCartList() {
+  try {
+    const cartTable = document.getElementById("cartTable");
+
+    cartTable.innerHTML = "";
+
+    cartItems.forEach((p) => {
+      cartTable.innerHTML += `
+      
+      <tr>
+      <td>${p.name}</td>
+      <td>
+      <div class="d-flex gap-2">
+
+      <button class="btn btn-outline-success" >+</button>
+      
+      <h5>${p.qty}</h5>
+ <button class="btn btn-outline-danger" >-</button>
+      
+      </div>
+      </td>
+      <td>₹ ${p.price * p.qty}</td>
+      <td><button class="btn btn-outline-danger" >remove</button></td>
+      
+      </tr>
+      
+
+      `;
+    });
+  } catch (error) {}
+}
