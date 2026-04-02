@@ -156,7 +156,7 @@ function showModal() {
     let modal = new bootstrap.Modal(cartList);
 
     modal.show();
-    showCartList();
+    updateLatestData();
   } catch (error) {
     console.log(error);
   }
@@ -176,15 +176,15 @@ function showCartList() {
       <td>
       <div class="d-flex gap-2">
 
-      <button class="btn btn-outline-success" >+</button>
+      <button class="btn btn-outline-success" onclick="increase(${p.id})" >+</button>
       
       <h5>${p.qty}</h5>
- <button class="btn btn-outline-danger" >-</button>
+ <button class="btn btn-outline-danger" onclick="decrease(${p.id})"  >-</button>
       
       </div>
       </td>
       <td>₹ ${p.price * p.qty}</td>
-      <td><button class="btn btn-outline-danger" >remove</button></td>
+      <td><button class="btn btn-outline-danger" onclick="remove(${p.id})"  >remove</button></td>
       
       </tr>
       
@@ -192,4 +192,68 @@ function showCartList() {
       `;
     });
   } catch (error) {}
+}
+
+function increase(id) {
+  const product = cartItems.find((p) => p.id === id);
+
+  if (product) {
+    product.qty++;
+  }
+
+  updateLatestData();
+}
+
+function updateLatestData() {
+  localStorage.setItem("cartData", JSON.stringify(cartItems));
+
+  showCartList();
+  total();
+}
+
+function decrease(id) {
+  const product = cartItems.find((p) => p.id === id);
+
+  if (product) {
+    product.qty--;
+  }
+
+  if (product.qty <= 0) {
+    cartItems = cartItems.filter((p) => p.id !== id);
+  }
+
+  updateLatestData();
+}
+
+function remove(id) {
+  cartItems = cartItems.filter((p) => p.id !== id);
+
+  updateLatestData();
+}
+
+function total() {
+  const total = document.getElementById("grand-total");
+
+  total.innerHTML = "";
+
+  const totalAmount = cartItems.reduce((acc, curr) => {
+    return (acc += curr.price * curr.qty);
+  }, 0);
+
+  console.log("total Amount", totalAmount);
+
+  total.innerHTML += `<h5>₹${totalAmount}</h5>`;
+}
+
+function checkOut() {
+  if (cartItems.length === 0) {
+    alert(
+      "there is currently no items in cart please add some item to checkout",
+    );
+  } else {
+    alert("order placed successfully");
+
+    cartItems = [];
+    updateLatestData();
+  }
 }
