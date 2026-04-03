@@ -91,10 +91,11 @@ const products = [
   },
 ];
 
-products.forEach((p) => {
+function showProduct() {
   const productList = document.getElementById("product-list");
-
-  productList.innerHTML += `
+  productList.innerHTML = "";
+  products.forEach((p) => {
+    productList.innerHTML += `
     
     <div class="col-md-4 mt-3">
     <div class="card product-card shadow rounded-4">
@@ -109,7 +110,12 @@ products.forEach((p) => {
     </div>
 
     `;
-});
+  });
+
+  console.log("products", products);
+}
+
+showProduct();
 
 // localStorage concept added
 
@@ -257,3 +263,30 @@ function checkOut() {
     updateLatestData();
   }
 }
+
+function addModalShow() {
+  const addProductModal = document.getElementById("addProductModal");
+
+  const modal = new bootstrap.Modal(addProductModal);
+
+  modal.show();
+}
+
+document.getElementById("productForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("productName").value;
+  const price = Number(document.getElementById("productPrice").value);
+  const image = document.getElementById("productImage").value;
+
+  const newProduct = {
+    id: new Date().getTime(),
+    name,
+    price,
+    image,
+  };
+
+  products.push({ ...newProduct });
+
+  showProduct();
+});
