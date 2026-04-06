@@ -1,4 +1,4 @@
-const products = [
+let products = [
   {
     id: 1,
     name: "Wireless Headphones",
@@ -103,7 +103,10 @@ function showProduct() {
   <div class="card-body text-center">
     <h5 class="card-title">${p.name}</h5>
      <h4 class="card-text">₹${p.price} </h4>
-  <button class="btn btn-primary" onclick="addToCart(${p.id})" >Add to cart</button>
+  <button class="btn btn-outline-primary" onclick="addToCart(${p.id})" >Add to cart</button>
+
+  <button class="btn btn-outline-warning " onclick="updateProductModal(${p.id})" >✏️</button>
+    <button class="btn btn-outline-danger" onclick="deleteProduct(${p.id})" >🗑️</button>
   </div>
 </div>
     
@@ -290,3 +293,62 @@ document.getElementById("productForm").addEventListener("submit", (e) => {
 
   showProduct();
 });
+
+function deleteProduct(id) {
+  const product = products.find((p) => p.id === id);
+
+  if (!product) {
+    alert(" product not found");
+  }
+
+  products = products.filter((p) => p.id !== id);
+  showProduct();
+}
+
+function updateProductModal(id) {
+  const updateProductModal = document.getElementById("updateProductModal");
+
+  let modal = new bootstrap.Modal(updateProductModal);
+
+  modal.show();
+
+  const product = products.find((p) => p.id === id);
+
+  if (!product) {
+    return alert(" product not found");
+  }
+
+  let index = products.findIndex((p) => p.id === id);
+
+  if (index === -1) {
+    return alert(" product not found");
+  }
+
+  document.getElementById("updateProductName").value = products[index].name;
+  document.getElementById("updateProductPrice").value = products[index].price;
+  document.getElementById("updateProductImage").value = products[index].image;
+
+  document
+    .getElementById("updateProductForm")
+    .addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      let name = document.getElementById("updateProductName").value;
+      let price = document.getElementById("updateProductPrice").value;
+      let image = document.getElementById("updateProductImage").value;
+
+      console.log("updated name", name);
+      console.log("updated price", price);
+      console.log("updated image", image);
+
+      products[index] = {
+        name,
+        price,
+        image,
+      };
+
+      modal.hide();
+
+      showProduct();
+    });
+}
