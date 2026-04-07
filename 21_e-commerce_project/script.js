@@ -328,27 +328,23 @@ function updateProductModal(id) {
   document.getElementById("updateProductPrice").value = products[index].price;
   document.getElementById("updateProductImage").value = products[index].image;
 
-  document
-    .getElementById("updateProductForm")
-    .addEventListener("submit", (e) => {
-      e.preventDefault();
+  const form = document.getElementById("updateProductForm");
 
-      let name = document.getElementById("updateProductName").value;
-      let price = document.getElementById("updateProductPrice").value;
-      let image = document.getElementById("updateProductImage").value;
+  form.onsubmit = function (e) {
+    e.preventDefault();
 
-      console.log("updated name", name);
-      console.log("updated price", price);
-      console.log("updated image", image);
+    let name = document.getElementById("updateProductName").value;
+    let price = document.getElementById("updateProductPrice").value;
+    let image = document.getElementById("updateProductImage").value;
+    products[index] = {
+      ...products[index],
+      name,
+      price: Number(price),
+      image,
+    };
 
-      products[index] = {
-        name,
-        price,
-        image,
-      };
+    modal.hide();
 
-      modal.hide();
-
-      showProduct();
-    });
+    showProduct();
+  };
 }
