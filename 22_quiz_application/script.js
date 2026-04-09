@@ -73,14 +73,20 @@ let nextButton = document.getElementById("nextBtn");
 
 let currentIndex = 0;
 
+let score = 0;
+
+let selectedAnswer = null;
+
 function loadQns() {
   let currentQns = quizData[currentIndex];
+
+  qnsNumberEl.innerText = `Qns ${currentIndex + 1}/${quizData.length}`;
 
   qns.innerText = currentQns.question;
 
   options.innerHTML = "";
 
-  currentQns.options.forEach((opt) => {
+  currentQns.options.forEach((opt, index) => {
     let col = document.createElement("div");
 
     col.classList.add("col-md-6");
@@ -91,6 +97,11 @@ function loadQns() {
 
     button.classList.add("btn", "btn-outline-primary", "option-btn");
 
+    button.onclick = function () {
+      selectedAnswer = index;
+      nextQns();
+    };
+
     options.appendChild(col);
 
     col.appendChild(button);
@@ -98,3 +109,26 @@ function loadQns() {
 }
 
 loadQns();
+
+function nextQns() {
+  if (selectedAnswer === quizData[currentIndex].correct) {
+    score++;
+  }
+
+  if (currentIndex < quizData.length - 1) {
+    currentIndex++;
+    selectedAnswer = null;
+    loadQns();
+  } else {
+    quizResult();
+  }
+}
+
+function quizResult() {
+  const quizResultEl = document.getElementById("quiz-result");
+
+  quizResultEl.innerHTML = `
+  <h3 class="text-center "> Quiz Result 🎉</h3>
+  <h4 class="text-center">Result:-  ${score}/${quizData.length} </h4>
+  `;
+}
