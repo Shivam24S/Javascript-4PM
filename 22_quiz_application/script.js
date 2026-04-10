@@ -77,8 +77,12 @@ let score = 0;
 
 let selectedAnswer = null;
 
+let userAnswer = [];
+
 function loadQns() {
   let currentQns = quizData[currentIndex];
+
+  console.log;
 
   qnsNumberEl.innerText = `Qns ${currentIndex + 1}/${quizData.length}`;
 
@@ -99,6 +103,14 @@ function loadQns() {
 
     button.onclick = function () {
       selectedAnswer = index;
+
+      userAnswer.push({
+        question: currentQns.question,
+        selected: index,
+        correct: currentQns.correct,
+        options: currentQns.options,
+      });
+
       nextQns();
     };
 
@@ -125,10 +137,41 @@ function nextQns() {
 }
 
 function quizResult() {
-  const quizResultEl = document.getElementById("quiz-result");
+  const quizResultEl = document.querySelector(".quiz-card");
 
   quizResultEl.innerHTML = `
   <h3 class="text-center "> Quiz Result 🎉</h3>
   <h4 class="text-center">Result:-  ${score}/${quizData.length} </h4>
+
+  <div  class="mt-3" >
+
+  <h3  class="text-center" >Review Summary</h3>
+
+  <ul class="list-group" >
+  ${userAnswer.map(
+    (ans, index) => `
+    
+    <li class="list-group-item">
+
+    <h5 class="text-center"> Question No-${index + 1} :- ${ans.question}</h5>
+    <br>
+    <h6 class="text-center">Your Answer :- ${ans.selected !== null ? ans.options[ans.selected] : "not selected"}  </h6>
+    <br>
+    <h6 class="text-center" >Correct Answer :- ${ans.options[ans.correct]}</h6>
+    
+    </li>
+    
+    
+    `,
+  )}
+  </ul>
+
+  </div>
+
+
+
+  
+
+
   `;
 }
