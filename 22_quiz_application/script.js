@@ -46,7 +46,7 @@ const quizData = [
   },
   {
     question: "Which HTML tag is used to insert an image?",
-    options: ["<img>", "<image>", "<src>", "<pic>"],
+    options: ["img", "image", "src", "pic"],
     correct: 0,
   },
   {
@@ -59,7 +59,46 @@ const quizData = [
     options: ["int", "string", "let", "define"],
     correct: 2,
   },
+
+  
 ];
+
+
+const image = [
+
+  "image-1 url",
+  "image-1 url",
+  "image-1 url",
+  "image-1 url",
+
+]
+
+
+
+// using api
+// let quizData
+
+// async function fetchQuizData(){
+//   try {
+
+//     const data = await fetch("url")
+
+//     const res = data.json()
+
+//     quizData = res
+    
+//   } catch (error) {
+    
+//   }
+// }
+
+
+// fetchQuizData()
+
+
+
+
+// console.log(quizData)
 
 let qnsNumberEl = document.getElementById("qnsNumber");
 
@@ -79,10 +118,13 @@ let selectedAnswer = null;
 
 let userAnswer = [];
 
+let timer;
+
+let timeLeft = 30;
+
 function loadQns() {
   let currentQns = quizData[currentIndex];
 
-  console.log;
 
   qnsNumberEl.innerText = `Qns ${currentIndex + 1}/${quizData.length}`;
 
@@ -114,6 +156,8 @@ function loadQns() {
       nextQns();
     };
 
+    startTimer();
+
     options.appendChild(col);
 
     col.appendChild(button);
@@ -121,6 +165,33 @@ function loadQns() {
 }
 
 loadQns();
+
+function startTimer() {
+  let timerEl = document.getElementById("timer");
+
+  clearInterval(timer);
+
+  timeLeft = 30;
+
+  timerEl.innerText = `Time Left ${timeLeft}`;
+
+  timer = setInterval(() => {
+    timeLeft--;
+    timerEl.innerText = `Time Left ${timeLeft}`;
+
+    if (timeLeft <= 0) {
+      userAnswer.push({
+        question: quizData[currentIndex].question,
+        selected: null,
+        correct: quizData[currentIndex].correct,
+        options: quizData[currentIndex].options,
+      });
+
+        nextQns();
+    
+    }
+  }, 1000);
+}
 
 function nextQns() {
   if (selectedAnswer === quizData[currentIndex].correct) {
@@ -155,7 +226,7 @@ function quizResult() {
 
     <h5 class="text-center"> Question No-${index + 1} :- ${ans.question}</h5>
     <br>
-    <h6 class="text-center">Your Answer :- ${ans.selected !== null ? ans.options[ans.selected] : "not selected"}  </h6>
+    <h6 class="text-center">Your Answer :- ${ans.selected !== null ? ans.options[ans.selected] : "not answered"}  </h6>
     <br>
     <h6 class="text-center" >Correct Answer :- ${ans.options[ans.correct]}</h6>
     
@@ -168,9 +239,6 @@ function quizResult() {
 
   </div>
 
-
-
-  
 
 
   `;
