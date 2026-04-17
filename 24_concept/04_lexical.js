@@ -1,9 +1,9 @@
 
-let num = 48;
+// let num = 48;
 
 function a() {
 
-    let num = 24;
+    // let num = 24;
 
 
     console.log(num);
