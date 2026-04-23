@@ -16,7 +16,7 @@ console.log("20" / 2);
 console.log(true + true);
 
 // 6
-console.log(false + 10);
+console.log("6",false + 10);
 
 // 7
 console.log(null + 1);
@@ -28,7 +28,7 @@ console.log(undefined + 1);
 console.log("5" + true);
 
 // 10
-console.log("5" - true);
+console.log("10","5" - true);
 
 // 11
 console.log(Number("50"));
